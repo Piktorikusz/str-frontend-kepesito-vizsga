@@ -1,19 +1,32 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Movie } from '../model/movie';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
 
-  BASE_URL = 'http://localhost:3000/movies';
+  //BASE_URL = 'http://localhost:3000/movies';
+  ApiUrl :string = 'https://tr360-frontend-exam-april.azurewebsites.net/piktorikusz/movies';
 
-  constructor(undefined) { }
+  constructor(
+    private http: HttpClient
+  ) { }
+    
 
-  getMovieList():any {
-    return null;
+  getMovieList(): Observable<Movie[]> {
+    return this.http.get<Movie[]>(this.ApiUrl);
   }
 
-  deleteMovie(id):any {
-    return null;
+  update(movie: Movie): Observable<Movie> {
+    return this.http.patch<Movie>(`${this.ApiUrl}/${movie.id}`, movie);
+  }
+
+
+  
+  deleteMovie(id: number): Observable<Movie> {
+    return this.http.delete<Movie>(`${this.ApiUrl}/${id}`);
   }
 }
